@@ -4,9 +4,12 @@ import {
   Receipt,
   History,
   LogOut,
+  ArrowRightLeft,
+  KeyRound,
+  Printer,
 } from "lucide-react";
 
-export type ATMView = "menu" | "withdraw" | "deposit" | "balance" | "history";
+export type ATMView = "menu" | "withdraw" | "deposit" | "balance" | "history" | "transfer" | "changepin" | "receipt";
 
 interface MainMenuProps {
   onNavigate: (view: ATMView) => void;
@@ -17,7 +20,10 @@ const menuItems: { view: ATMView; label: string; icon: typeof Banknote; desc: st
   { view: "balance", label: "Balance", icon: Receipt, desc: "Check balance" },
   { view: "withdraw", label: "Withdraw", icon: Banknote, desc: "Cash withdrawal" },
   { view: "deposit", label: "Deposit", icon: PiggyBank, desc: "Cash deposit" },
-  { view: "history", label: "History", icon: History, desc: "Recent transactions" },
+  { view: "transfer", label: "Transfer", icon: ArrowRightLeft, desc: "Send funds" },
+  { view: "history", label: "History", icon: History, desc: "Recent activity" },
+  { view: "receipt", label: "Receipt", icon: Printer, desc: "Last receipt" },
+  { view: "changepin", label: "Change PIN", icon: KeyRound, desc: "Update PIN" },
 ];
 
 const MainMenu = ({ onNavigate, onLogout }: MainMenuProps) => {

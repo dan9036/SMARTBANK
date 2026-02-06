@@ -5,10 +5,13 @@ import MainMenu, { ATMView } from "@/components/MainMenu";
 import BalanceScreen from "@/components/BalanceScreen";
 import TransactionScreen from "@/components/TransactionScreen";
 import HistoryScreen from "@/components/HistoryScreen";
+import ReceiptScreen from "@/components/ReceiptScreen";
+import ChangePinScreen from "@/components/ChangePinScreen";
+import TransferScreen from "@/components/TransferScreen";
 import { useATM } from "@/hooks/useATM";
 
 const Index = () => {
-  const { balance, isAuthenticated, transactions, authenticate, logout, withdraw, deposit } = useATM();
+  const { balance, isAuthenticated, transactions, authenticate, logout, withdraw, deposit, changePin, transfer } = useATM();
   const [view, setView] = useState<ATMView>("menu");
 
   const handleLogout = () => {
@@ -25,21 +28,17 @@ const Index = () => {
       ) : view === "balance" ? (
         <BalanceScreen balance={balance} onBack={() => setView("menu")} />
       ) : view === "withdraw" ? (
-        <TransactionScreen
-          type="withdraw"
-          balance={balance}
-          onSubmit={withdraw}
-          onBack={() => setView("menu")}
-        />
+        <TransactionScreen type="withdraw" balance={balance} onSubmit={withdraw} onBack={() => setView("menu")} />
       ) : view === "deposit" ? (
-        <TransactionScreen
-          type="deposit"
-          balance={balance}
-          onSubmit={deposit}
-          onBack={() => setView("menu")}
-        />
+        <TransactionScreen type="deposit" balance={balance} onSubmit={deposit} onBack={() => setView("menu")} />
       ) : view === "history" ? (
         <HistoryScreen transactions={transactions} onBack={() => setView("menu")} />
+      ) : view === "receipt" ? (
+        <ReceiptScreen transaction={transactions[0] || null} balance={balance} onBack={() => setView("menu")} />
+      ) : view === "changepin" ? (
+        <ChangePinScreen onChangePin={changePin} onBack={() => setView("menu")} />
+      ) : view === "transfer" ? (
+        <TransferScreen balance={balance} onTransfer={transfer} onBack={() => setView("menu")} />
       ) : null}
     </ATMShell>
   );
