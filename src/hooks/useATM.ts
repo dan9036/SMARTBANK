@@ -15,12 +15,12 @@ interface ATMState {
   transactions: Transaction[];
 }
 
-const VALID_PIN = "1234";
+const DEFAULT_PIN = "1234";
 
 export function useATM() {
   const [state, setState] = useState<ATMState>({
     balance: 25750.0,
-    pin: "",
+    pin: DEFAULT_PIN,
     isAuthenticated: false,
     transactions: [
       { id: "1", type: "deposit", amount: 5000, date: new Date(2026, 1, 4), balance: 25750 },
@@ -30,12 +30,40 @@ export function useATM() {
   });
 
   const authenticate = useCallback((pin: string): boolean => {
-    if (pin === VALID_PIN) {
+    if (pin === state.pin) {
       setState((s) => ({ ...s, isAuthenticated: true }));
       return true;
     }
     return false;
-  }, []);
+  }, [state.pin]);
+
+  const changePin = useCallback((oldPin: string, newPin: string): boolean => {
+    if (oldPin !== state.pin || newPin.length !== 4) return false;
+    setState((s) => ({ ...s, pin: newPin }));
+    return true;
+  }, [state.pin]);
+
+  const transfer = useCallback((toAccount: string, amount: number): boolean => {
+    if (amount <= 0 || amount > state.balance || toAccount.length < 4) return false;
+    setState((s) => {
+      const newBalance = s.balance - amount;
+      return {
+        ...s,
+        balance: newBalance,
+        transactions: [
+          {
+            id: Date.now().toString(),
+            type: "withdrawal" as const,
+            amount,
+            date: new Date(),
+            balance: newBalance,
+          },
+          ...s.transactions,
+        ],
+      };
+    });
+    return true;
+  }, [state.balance]);
 
   const logout = useCallback(() => {
     setState((s) => ({ ...s, isAuthenticated: false }));
@@ -93,5 +121,7 @@ export function useATM() {
     logout,
     withdraw,
     deposit,
+    changePin,
+    transfer,
   };
 }
