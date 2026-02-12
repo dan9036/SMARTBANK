@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import ATMShell from "@/components/ATMShell";
+import CardInsertScreen from "@/components/CardInsertScreen";
 import PinScreen from "@/components/PinScreen";
 import MainMenu, { ATMView } from "@/components/MainMenu";
 import BalanceScreen from "@/components/BalanceScreen";
@@ -15,11 +16,13 @@ const SESSION_TIMEOUT = 30000; // 30 seconds
 const Index = () => {
   const { balance, isAuthenticated, transactions, authenticate, logout, withdraw, deposit, changePin, transfer } = useATM();
   const [view, setView] = useState<ATMView>("menu");
+  const [cardInserted, setCardInserted] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleLogout = useCallback(() => {
     logout();
     setView("menu");
+    setCardInserted(false);
   }, [logout]);
 
   const resetTimer = useCallback(() => {
@@ -45,7 +48,9 @@ const Index = () => {
 
   return (
     <ATMShell>
-      {!isAuthenticated ? (
+      {!cardInserted ? (
+        <CardInsertScreen onComplete={() => setCardInserted(true)} />
+      ) : !isAuthenticated ? (
         <PinScreen onAuth={authenticate} />
       ) : view === "menu" ? (
         <MainMenu onNavigate={setView} onLogout={handleLogout} />
