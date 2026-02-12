@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowLeft, CheckCircle, XCircle } from "lucide-react";
 import Keypad from "./Keypad";
+import { sounds } from "@/lib/sounds";
 
 interface TransactionScreenProps {
   type: "withdraw" | "deposit";
@@ -18,6 +19,7 @@ const TransactionScreen = ({ type, balance, onSubmit, onBack }: TransactionScree
 
   const handleQuickAmount = (val: number) => {
     const success = onSubmit(val);
+    success ? sounds.success() : sounds.error();
     setResult(success ? "success" : "error");
   };
 
@@ -25,6 +27,7 @@ const TransactionScreen = ({ type, balance, onSubmit, onBack }: TransactionScree
     const val = parseFloat(amount);
     if (isNaN(val) || val <= 0) return;
     const success = onSubmit(val);
+    success ? sounds.success() : sounds.error();
     setResult(success ? "success" : "error");
   };
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Lock, AlertCircle } from "lucide-react";
 import Keypad from "./Keypad";
+import { sounds } from "@/lib/sounds";
 
 interface PinScreenProps {
   onAuth: (pin: string) => boolean;
@@ -27,12 +28,15 @@ const PinScreen = ({ onAuth }: PinScreenProps) => {
     if (pin.length === 4) {
       const success = onAuth(pin);
       if (!success) {
+        sounds.error();
         setError(true);
         setShake(true);
         setTimeout(() => {
           setShake(false);
           setPin("");
         }, 600);
+      } else {
+        sounds.success();
       }
     }
   };

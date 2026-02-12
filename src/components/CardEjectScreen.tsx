@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CreditCard } from "lucide-react";
+import { sounds } from "@/lib/sounds";
 
 interface CardEjectScreenProps {
   onComplete: () => void;
@@ -9,6 +10,7 @@ const CardEjectScreen = ({ onComplete }: CardEjectScreenProps) => {
   const [phase, setPhase] = useState<"ejecting" | "waiting" | "done">("ejecting");
 
   useEffect(() => {
+    sounds.cardEject();
     setTimeout(() => setPhase("waiting"), 800);
     setTimeout(() => setPhase("done"), 2200);
     setTimeout(() => onComplete(), 2800);

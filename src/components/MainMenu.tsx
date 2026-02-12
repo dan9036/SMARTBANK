@@ -8,6 +8,7 @@ import {
   KeyRound,
   Printer,
 } from "lucide-react";
+import { sounds } from "@/lib/sounds";
 
 export type ATMView = "menu" | "withdraw" | "deposit" | "balance" | "history" | "transfer" | "changepin" | "receipt";
 
@@ -37,7 +38,7 @@ const MainMenu = ({ onNavigate, onLogout }: MainMenuProps) => {
           {menuItems.map(({ view, label, icon: Icon, desc }) => (
             <button
               key={view}
-              onClick={() => onNavigate(view)}
+              onClick={() => { sounds.navigate(); onNavigate(view); }}
               className="group flex flex-col items-center gap-2 p-5 rounded-xl bg-secondary/60 border border-border hover:border-primary/40 hover:bg-secondary transition-all duration-200 active:scale-95"
             >
               <Icon className="w-7 h-7 text-primary group-hover:scale-110 transition-transform" />
