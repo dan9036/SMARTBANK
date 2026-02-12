@@ -1,3 +1,5 @@
+import { sounds } from "@/lib/sounds";
+
 interface KeypadProps {
   onKey: (key: string) => void;
   onClear: () => void;
@@ -16,7 +18,7 @@ const Keypad = ({ onKey, onClear, onSubmit, submitLabel = "Enter" }: KeypadProps
             return (
               <button
                 key="clear"
-                onClick={onClear}
+                onClick={() => { sounds.keypress(); onClear(); }}
                 className="atm-keypad-btn h-14 text-destructive text-sm"
               >
                 Clear
@@ -26,7 +28,7 @@ const Keypad = ({ onKey, onClear, onSubmit, submitLabel = "Enter" }: KeypadProps
           return (
             <button
               key="submit"
-              onClick={onSubmit}
+              onClick={() => { sounds.submit(); onSubmit(); }}
               className="atm-action-btn h-14 text-sm font-semibold"
             >
               {submitLabel}
@@ -36,7 +38,7 @@ const Keypad = ({ onKey, onClear, onSubmit, submitLabel = "Enter" }: KeypadProps
         return (
           <button
             key={key}
-            onClick={() => onKey(key)}
+            onClick={() => { sounds.keypress(); onKey(key); }}
             className="atm-keypad-btn h-14"
           >
             {key}

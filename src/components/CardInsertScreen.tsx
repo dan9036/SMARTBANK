@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { CreditCard } from "lucide-react";
+import { sounds } from "@/lib/sounds";
 
 interface CardInsertScreenProps {
   onComplete: () => void;
@@ -9,6 +10,7 @@ const CardInsertScreen = ({ onComplete }: CardInsertScreenProps) => {
   const [phase, setPhase] = useState<"idle" | "inserting" | "reading">("idle");
 
   const handleInsert = () => {
+    sounds.cardInsert();
     setPhase("inserting");
     setTimeout(() => setPhase("reading"), 800);
     setTimeout(() => onComplete(), 2000);
