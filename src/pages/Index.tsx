@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import ATMShell from "@/components/ATMShell";
 import PinScreen from "@/components/PinScreen";
 import MainMenu, { ATMView } from "@/components/MainMenu";
@@ -10,14 +10,38 @@ import ChangePinScreen from "@/components/ChangePinScreen";
 import TransferScreen from "@/components/TransferScreen";
 import { useATM } from "@/hooks/useATM";
 
+const SESSION_TIMEOUT = 30000; // 30 seconds
+
 const Index = () => {
   const { balance, isAuthenticated, transactions, authenticate, logout, withdraw, deposit, changePin, transfer } = useATM();
   const [view, setView] = useState<ATMView>("menu");
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout();
     setView("menu");
-  };
+  }, [logout]);
+
+  const resetTimer = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (isAuthenticated) {
+      timeoutRef.current = setTimeout(handleLogout, SESSION_TIMEOUT);
+    }
+  }, [isAuthenticated, handleLogout]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      return;
+    }
+    resetTimer();
+    const events = ["mousedown", "keydown", "touchstart", "mousemove"];
+    events.forEach((e) => window.addEventListener(e, resetTimer));
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      events.forEach((e) => window.removeEventListener(e, resetTimer));
+    };
+  }, [isAuthenticated, resetTimer]);
 
   return (
     <ATMShell>
