@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import ATMShell from "@/components/ATMShell";
 import CardInsertScreen from "@/components/CardInsertScreen";
+import CardEjectScreen from "@/components/CardEjectScreen";
 import PinScreen from "@/components/PinScreen";
 import MainMenu, { ATMView } from "@/components/MainMenu";
 import BalanceScreen from "@/components/BalanceScreen";
@@ -17,13 +18,19 @@ const Index = () => {
   const { balance, isAuthenticated, transactions, authenticate, logout, withdraw, deposit, changePin, transfer } = useATM();
   const [view, setView] = useState<ATMView>("menu");
   const [cardInserted, setCardInserted] = useState(false);
+  const [ejecting, setEjecting] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleLogout = useCallback(() => {
     logout();
     setView("menu");
-    setCardInserted(false);
+    setEjecting(true);
   }, [logout]);
+
+  const handleEjectComplete = useCallback(() => {
+    setEjecting(false);
+    setCardInserted(false);
+  }, []);
 
   const resetTimer = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -48,7 +55,9 @@ const Index = () => {
 
   return (
     <ATMShell>
-      {!cardInserted ? (
+      {ejecting ? (
+        <CardEjectScreen onComplete={handleEjectComplete} />
+      ) : !cardInserted ? (
         <CardInsertScreen onComplete={() => setCardInserted(true)} />
       ) : !isAuthenticated ? (
         <PinScreen onAuth={authenticate} />
