@@ -24,12 +24,6 @@ const ATMShell = ({ children }: ATMShellProps) => {
           </div>
         </div>
 
-        {/* ATM Footer */}
-        <div className="mt-4 text-center">
-          <p className="text-xs text-muted-foreground font-mono">
-            Demo PIN: <span className="gold-text">1234</span>
-          </p>
-        </div>
       </div>
     </div>
   );
