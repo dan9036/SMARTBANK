@@ -10,10 +10,12 @@ const ATMShell = ({ children }: ATMShellProps) => {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
         {/* ATM Header */}
-        <div className="flex items-center justify-center gap-3 mb-6">
-          <CreditCard className="w-8 h-8 text-primary" />
+        <div className="flex flex-col items-center gap-2 mb-6">
+          <div className="w-14 h-14 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center shadow-lg shadow-primary/10">
+            <CreditCard className="w-8 h-8 text-primary" />
+          </div>
           <h1 className="text-2xl font-bold font-mono glow-text tracking-wider">
-            SECURE ATM
+            SMARTBANK <span className="text-muted-foreground text-lg">ATM</span>
           </h1>
         </div>
 
