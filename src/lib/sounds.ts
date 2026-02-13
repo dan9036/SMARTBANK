@@ -24,18 +24,20 @@ const playTone = (freq: number, duration: number, type: OscillatorType = "sine",
 };
 
 export const sounds = {
-  keypress: () => playTone(800, 0.06, "square", 0.08),
+  keypress: () => playTone(1400, 0.04, "triangle", 0.06),
 
   submit: () => playTone(1200, 0.1, "sine", 0.12),
 
   cardInsert: () => {
-    playTone(300, 0.15, "sawtooth", 0.06);
-    setTimeout(() => playTone(500, 0.2, "sine", 0.1), 120);
+    playTone(220, 0.1, "triangle", 0.08);
+    setTimeout(() => playTone(440, 0.12, "triangle", 0.1), 100);
+    setTimeout(() => playTone(660, 0.15, "sine", 0.08), 200);
   },
 
   cardEject: () => {
-    playTone(500, 0.15, "sine", 0.1);
-    setTimeout(() => playTone(300, 0.2, "sawtooth", 0.06), 120);
+    playTone(660, 0.1, "sine", 0.08);
+    setTimeout(() => playTone(440, 0.12, "triangle", 0.1), 100);
+    setTimeout(() => playTone(220, 0.15, "triangle", 0.08), 200);
   },
 
   success: () => {
